@@ -5,8 +5,9 @@ import {
   KAFKA_BROKER,
   KAFKA_CLIENT_ID,
   KAFKA_CONSUMER_GROUP,
-} from '../constants/kafka.constants';
+} from './constants/kafka.constants';
 
+// dependency injection
 export const KAFKA_SERVICE = 'KAFKA_SERVICE';
 
 @Module({})
