@@ -14,17 +14,18 @@ export class AuthServiceService implements OnModuleInit {
     await this.kafkaClient.connect();
   }
 
-  getHello(): string {
-    return 'Hello World!';
-  }
+  // this is for testing the route
+  // getHello(): string {
+  //   return 'Hello World!';
+  // }
 
-  simulateUserRegistrationg(email: string) {
-    // publist event to kafka
+  // simulateUserRegistrationg(email: string) {
+  //   // publist event to kafka
 
-    this.kafkaClient.emit(KAFKA_TOPICS.USER_REGISTERED, {
-      email,
-      timestamp: new Date().toISOString(),
-    });
-    return { message: `User registered: ${email}` };
-  }
+  //   this.kafkaClient.emit(KAFKA_TOPICS.USER_REGISTERED, {
+  //     email,
+  //     timestamp: new Date().toISOString(),
+  //   });
+  //   return { message: `User registered: ${email}` };
+  // }
 }
