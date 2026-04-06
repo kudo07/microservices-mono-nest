@@ -12,7 +12,13 @@ export class AuthServiceController {
 
   // get request for simualate-user-registration
   @Post('register')
-  async register(@Body() body: { email: string }) {
-    return this.authServiceService.simulateUserRegistrationg(body.email);
+  async register(
+    @Body() body: { email: string; password: string; name: string },
+  ) {
+    return this.authServiceService.register(
+      body.email,
+      body.password,
+      body.name,
+    );
   }
 }
