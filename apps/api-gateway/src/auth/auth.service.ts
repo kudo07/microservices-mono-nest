@@ -16,15 +16,18 @@ export class AuthService {
     name: string;
   }): Promise<UserProfileResponse> {
     try {
+      console.log('here');
       const response = await firstValueFrom(
         this.httpService.post<UserProfileResponse>(
           `${this.authServiceUrl}/register`,
           data,
         ),
       );
+      console.log(response.data);
+
       return response.data;
     } catch (error) {
-      console.error(error);
+      console.log(error);
       this.handleError(error);
     }
   }
