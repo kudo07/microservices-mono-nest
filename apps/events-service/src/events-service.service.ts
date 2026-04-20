@@ -94,5 +94,48 @@ export class EventsServiceService {
     return updated;
   }
 
-  async publish(id: string, userId: string, userRole: string) {}
+  async publish(id: string, userId: string, userRole: string) {
+    const event = await this.findOne(id);
+    if (event.organizerId !== userId && userRole !== 'ADMIN') {
+      throw new ForbiddenException(
+        'You are not authorized to publish this event',
+      );
+    }
+    const [published] = await this.dbService.db
+      .update(events)
+      .set({ status: 'PUBLISHED', updatedAt: new Date() })
+      .where(eq(events.id, id))
+      .returning();
+
+    return published;
+  }
+
+  async cancel(id: string, userId: string, userRole: string) {
+    const event = await this.findOne(id);
+
+    if (event.organizerId !== userId && userRole !== 'ADMIN') {
+      throw new ForbiddenException(
+        'You are not authorized to cancel this event',
+      );
+    }
+
+    const [cancelled] = await this.dbService.db
+      .update(events)
+      .set({ status: 'CANCELLED', updatedAt: new Date() })
+      .where(eq(events.id, id))
+      .returning();
+
+    this.kafkaClient.emit(KAFKA_TOPICS.EVENT_CANCELLED, {
+      eventId: cancelled.id,
+      organizerId: cancelled.organizerId,
+      timestamp: new Date().toISOString(),
+    });
+    return cancelled;
+  }
+  async findMyEvent(organizerId: string) {
+    return this.dbService.db
+      .select()
+      .from(events)
+      .where(eq(events.organizerId, organizerId));
+  }
 }
