@@ -47,6 +47,13 @@ export class EventsServiceService {
     return event;
   }
 
+  async findAll() {
+    return this.dbService.db
+      .select()
+      .from(events)
+      .where(eq(events.status, 'PUBLISHED'));
+  }
+
   async findOne(id: string) {
     const [event] = await this.dbService.db
       .select()
